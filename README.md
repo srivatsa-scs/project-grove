@@ -1,5 +1,7 @@
 # Project Grove
 
+This project was made using Angular / NodeJS / Bootstrap  / Traefik / Docker / Nginx / Postgres / MongoDB
+
 #.env File
 
 \#Data-DB / Postgres setup  
