@@ -1,0 +1,29 @@
+providers:
+  docker:
+    exposedByDefault: false
+  file:
+    directory: /etc/traefik/
+    watch: true
+entryPoints:
+  web:
+    address: ':80'
+  websecure:
+    address: ':443'
+api:
+  dashboard: true
+# tls:
+#   certificates:
+#     - certFile: '/etc/certs/grove.crt'
+#       keyFile: '/etc/certs/grove.key'
+log:
+  level: info
+certificatesResolvers:
+  le:
+    acme:
+      email: 'your@email.here'
+      storage: '/letsencrypt/acme.json'
+      dnsChallenge:
+        provider: cloudflare
+        delayBeforeCheck: 0
+      # caServer: 'https://acme-staging-v02.api.letsencrypt.org/directory'
+      caServer: 'https://acme-v02.api.letsencrypt.org/directory'

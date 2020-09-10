@@ -1,0 +1,6 @@
+{
+	"/api":{
+		"target": "http://server.grove.localhost",
+		"secure": false
+	}
+}

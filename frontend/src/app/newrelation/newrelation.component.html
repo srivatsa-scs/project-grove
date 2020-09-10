@@ -1,0 +1,125 @@
+<div class="container">
+  <mat-card class="page-description mt-2 mb-2 mx-auto">
+    <h3>
+      You can add or edit information about a person's direct relationships on this page. Click the edit button to modify the current information. Click the
+      <mat-icon class="icon-desc">person_add_alt_1</mat-icon> to add a new child. Click the <mat-icon class="icon-desc">person_add_alt_1</mat-icon> to remove a child.
+    </h3>
+  </mat-card>
+</div>
+<div class="container row">
+  <div class="col">
+    <form [formGroup]="editRelationsForm" (ngSubmit)="onRelationSubmit()">
+      <div class="form-group">
+        <select
+          [class.is-invalid]="editRelationsForm.get('person_id').invalid && editRelationsForm.get('person_id').touched"
+          (change)="fetchRelations()"
+          name=""
+          id=""
+          class="form-control bg-dark text-light"
+          formControlName="person_id"
+        >
+          <option value="0" class="" disabled>Pick a person</option>
+          <option *ngFor="let person of personArray" [value]="person.id">{{ person.first_name + ' ' + person.last_name }}</option>
+        </select>
+      </div>
+      <div class="form-group" style="float: right">
+        <button class="btn btn-success" type="button" (click)="editRelations()" *ngIf="showFlag"><mat-icon>create</mat-icon> Edit Relations</button>
+      </div>
+      <div class="form-group mt-5" *ngIf="showFlag && editFlag">
+        <div class="form-group">
+          <label>Father's Name:</label>
+          <select formControlName="father_id" class="form-control" [ngClass]="{ 'bg-disabled': !editFlag, 'bg-dark text-light': editFlag }">
+            <option value="0">Unset</option>
+            <option *ngFor="let person of personArray" [value]="person.id">{{ person.first_name + ' ' + person.last_name }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Mother's Name:</label>
+          <select formControlName="mother_id" class="form-control" [ngClass]="{ 'bg-disabled': !editFlag, 'bg-dark text-light': editFlag }">
+            <option value="0">Unset</option>
+            <option *ngFor="let person of personArray" [value]="person.id">{{ person.first_name + ' ' + person.last_name }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Spouse's Name:</label>
+          <select formControlName="spouse_id" class="form-control" [ngClass]="{ 'bg-disabled': !editFlag, 'bg-dark text-light': editFlag }">
+            <option value="0">Unset</option>
+            <option *ngFor="let person of personArray" [value]="person.id">{{ person.first_name + ' ' + person.last_name }}</option>
+          </select>
+        </div>
+        <label class="form-group">Children: </label>
+        <div formArrayName="children_id" *ngFor="let child of getChildrenFA.controls; let i = index" class="form-group">
+          <select class="form-control form-row" [ngClass]="{ 'bg-disabled': !editFlag, 'bg-dark text-light': editFlag }" [formControlName]="i">
+            <option [value]="0">Unset</option>
+            <option *ngFor="let person of personArray" [value]="person.id">{{ person.first_name + ' ' + person.last_name }}</option>
+          </select>
+        </div>
+        <div class="addButton" *ngIf="editFlag">
+          <button class="btn btn-success" type="button" (click)="_addChildren(0)" [disabled]="!editFlag"><mat-icon>person_add_alt_1</mat-icon> Add Child</button>
+          <button class="btn btn-danger ml-2" type="button" (click)="_removeChildren()" [disabled]="!editFlag"><mat-icon>person_remove_alt_1</mat-icon> Remove Child</button>
+        </div>
+      </div>
+      <div *ngIf="buttonFlag">
+        <button class="btn btn-primary" type="submit" [disabled]="editRelationsForm.invalid">Submit</button>
+      </div>
+      <label class="text-danger" *ngIf="buttonFlag && editRelationsForm?.invalid && showFlag">Check the names for repeats</label>
+    </form>
+  </div>
+  <div class="col">
+    <div class="row">
+      <div class="col">
+        <mat-card>
+          <img mat-card-avatar [src]="personArray[editRelationsForm.get('father_id')?.value - 1]?.photo_url" onerror="this.onerror=null;this.src='./assets/default.png'" />
+          <mat-card-title
+            >{{ personArray[editRelationsForm.get('father_id')?.value - 1]?.first_name || '?' }} {{ personArray[editRelationsForm.get('father_id')?.value - 1]?.last_name || '?' }}</mat-card-title
+          >
+          Father
+        </mat-card>
+      </div>
+      <div class="col">
+        <mat-card>
+          <img mat-card-avatar [src]="personArray[editRelationsForm.get('mother_id')?.value - 1]?.photo_url" onerror="this.onerror=null;this.src='./assets/default.png'" />
+          <mat-card-title
+            >{{ personArray[editRelationsForm.get('mother_id')?.value - 1]?.first_name || '?' }} {{ personArray[editRelationsForm.get('mother_id')?.value - 1]?.last_name || '?' }}</mat-card-title
+          >
+          Mother
+        </mat-card>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <mat-card>
+          <img mat-card-avatar [src]="personArray[editRelationsForm.get('person_id')?.value - 1]?.photo_url" onerror="this.onerror=null;this.src='./assets/default.png'" />
+          <mat-card-title
+            >{{ personArray[editRelationsForm.get('person_id')?.value - 1]?.first_name || '?' }} {{ personArray[editRelationsForm.get('person_id')?.value - 1]?.last_name || '?' }}</mat-card-title
+          >
+          <h3>You</h3>
+        </mat-card>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <mat-card>
+          <img mat-card-avatar [src]="personArray[editRelationsForm.get('spouse_id')?.value - 1]?.photo_url" onerror="this.onerror=null;this.src='./assets/default.png'" />
+          <mat-card-title
+            >{{ personArray[editRelationsForm.get('spouse_id')?.value - 1]?.first_name || '?' }} {{ personArray[editRelationsForm.get('spouse_id')?.value - 1]?.last_name || '?' }}</mat-card-title
+          >
+          Spouse
+        </mat-card>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <mat-card>
+          <div class="mx-auto">
+            <mat-card-title>Children</mat-card-title>
+          </div>
+          <mat-card *ngFor="let child of editRelationsForm.get('children_id')?.value">
+            <img mat-card-avatar [src]="personArray[child - 1]?.photo_url" onerror="this.onerror=null;this.src='./assets/default.png'" />
+            <mat-card-title> {{ personArray[child - 1]?.first_name || '?' }} {{ personArray[child - 1]?.last_name || '?' }} </mat-card-title>
+          </mat-card>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

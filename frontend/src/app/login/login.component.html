@@ -1,0 +1,29 @@
+<div class="row pt-5">
+  <div class="col-md-6 mx-auto">
+    <div class="card rounded-0 bg-dark text-light">
+      <div class="card-header">
+        <h3 class="mb-0 text-light">Login</h3>
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="loginUser()" [formGroup]="loginForm">
+          <div class="form-row">
+            <label class="form-label">Email</label>
+            <input formControlName="email" [class.is-invalid]="loginForm.get('email').invalid && loginForm.get('email').touched" type="text" class="form-control bg-dark text-light" required />
+            <small *ngIf="invalidFlag" class="text-danger">Email or Password is invalid</small>
+          </div>
+          <div class="form-row">
+            <label class="form-label mt-2">Password</label>
+            <input
+              formControlName="password"
+              [class.is-invalid]="loginForm.get('password').invalid && loginForm.get('password').touched"
+              type="password"
+              class="form-control bg-dark text-light"
+              required
+            />
+          </div>
+          <button type="submit" [disabled]="loginForm.invalid" class="btn btn-success float-right mt-2">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

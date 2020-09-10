@@ -1,0 +1,19 @@
+<nav class="navbar navbar-expand navbar-dark shadow" style="background-color: #3f51b5">
+  <div class="navbar-brand" routerLink="home" routerLinkActive="active" style="cursor: pointer">Project Grove</div>
+  <div class="navbar-nav mr-auto" *ngIf="_authService.loggedIn()">
+    <a class="nav-item nav-link" routerLink="home" routerLinkActive="active">Home</a>
+    <a class="nav-item nav-link" *ngIf="_authService.loggedIn()" routerLink="person" routerLinkActive="active">Person</a>
+    <a class="nav-item nav-link" *ngIf="_authService.loggedIn()" routerLink="addrelation" routerLinkActive="active">Add a relation</a>
+    <a class="nav-item nav-link" *ngIf="_authService.loggedIn()" routerLink="findrelation" routerLinkActive="active">Find relations</a>
+    <select name="" id="" class="navbar-select" [formControl]="languageChoice" (change)="changeLanguage()">
+      <option [value]="'english'">English</option>
+      <option [value]="'tamil'">தமிழ்</option>
+      <option [value]="'kannada'">ಕನ್ನಡ</option>
+      <option [value]="'hindi'">हिंदी</option>
+    </select>
+  </div>
+  <div class="navbar-nav ml-auto">
+    <a class="nav-item nav-link" *ngIf="!_authService.loggedIn()" routerLink="login" routerLinkActive="active">Login</a>
+    <a class="nav-item nav-link" style="cursor: pointer" *ngIf="_authService.loggedIn()" routerLinkActive="active" (click)="logout()">Logout</a>
+  </div>
+</nav>

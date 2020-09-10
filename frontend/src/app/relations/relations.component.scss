@@ -1,0 +1,60 @@
+.button-container > button {
+  background-color: #007bff;
+  // float: right;
+  cursor: pointer;
+}
+
+.button-container {
+  float: right;
+}
+
+/* Icon Text */
+
+.my-icon-label {
+  display: none; /* Hide text by default */
+  cursor: pointer;
+}
+
+// .mat-icon {
+//   position: relative;
+//   top: 5px;
+// }
+
+.mat-fab:hover .my-icon-label {
+  display: inline; /* Show text when hovering over the Icon */
+  cursor: pointer;
+}
+
+/* Icon Animations and Hover */
+
+.mat-fab {
+  transform-style: flat;
+  transition: 0.2s ease-in-out; /* Any animation that occours on the mat-fab will take 0.2s to occour and will ease-in and ease-out during the process*/
+  margin-right: 10px; /* Additional gaps if using multiple buttons */
+}
+
+.mat-fab:hover {
+  border-radius: 5px;
+  width: 76px;
+}
+
+.mat-expansion-panel,
+.mat-card:not([class*='mat-elevation-z']) {
+  box-shadow: none;
+}
+
+.viewIcons {
+  position: relative;
+  top: 5px;
+}
+.values {
+  margin-left: 10px;
+}
+
+.subtitle-drop-down {
+  color: white;
+}
+
+.page-description {
+  box-shadow: none;
+}

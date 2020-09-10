@@ -1,0 +1,45 @@
+acme/
+bind/
+certs/
+oldcerts/
+.env
+ca/
+grove.csr
+grove.ext
+frontend.conf
+# Server
+## Folders
+server/node_modules/
+server/.vscode/
+server/public/
+server/test/
+server/server/logs/
+## Files
+server/seeds/04_person.js
+server/seeds/05_relations.js
+server/.prettierrc
+server/.git/
+server/.env
+# Frontend
+## Folders
+frontend/dist/
+frontend/node_modules/
+frontend/src/environments/
+frontend/services/*.spec.ts
+frontend/src/assets/
+frontend/e2e/
+## Files
+frontend/src/app/proxy.conf.json
+frontend/src/app/test.ts
+frontend/.vscode
+frontend/.browserslistrc
+frontend/.dockerignore
+frontend/.editorconfig
+frontend/.gitignore
+frontend/.prettierrc
+frontend/karma.conf.js
+frontend/README.md
+frontend/tsconfig.json
+frontend/tsconfig.*.json
+frontend/tslint.json
+

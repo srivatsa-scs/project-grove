@@ -1,0 +1,29 @@
+<div class="container">
+  <mat-card class="page-description mt-2 mb-2" *ngIf="viewComponentFlag">
+    <h3>
+      Select a person below to view information about them. Click the <mat-icon class="icon-desc">add</mat-icon> to add a new person. Click the <mat-icon class="icon-desc">create</mat-icon> below to
+      edit information about that person.
+    </h3>
+  </mat-card>
+  <mat-card class="page-description mb-2 mt-2 container" *ngIf="addComponentFlag">
+    <h3>You can add or edit information about a person on this page. Click the <mat-icon class="icon-desc">remove_red_eye</mat-icon> to view people you've added / updated.</h3>
+  </mat-card>
+
+  <div>
+    <app-view *ngIf="viewComponentFlag" (onSelect)="toggleButtonVisibility($event)"></app-view>
+    <app-form *ngIf="addComponentFlag" [viewComponentId]="viewComponentId"></app-form>
+  </div>
+
+  <div [ngClass]="!editButtonFlag && viewComponentFlag ? 'addIconDefault' : 'addIcon'" *ngIf="addButtonFlag">
+    <button mat-fab type="button" (click)="addNew()"><mat-icon>add</mat-icon><label class="my-icon-label">Add</label></button>
+  </div>
+  <div class="editIcon" *ngIf="editButtonFlag">
+    <button mat-fab [disabled]="!(editButtonFlag && viewComponentFlag)" type="button" (click)="editThis()">
+      <mat-icon>create</mat-icon>
+      <label class="my-icon-label">Edit</label>
+    </button>
+  </div>
+  <div class="viewIcon" *ngIf="viewButtonFlag">
+    <button mat-fab [disabled]="viewComponentFlag" class="button" (click)="gotoView()"><mat-icon>remove_red_eye</mat-icon><label class="my-icon-label">View</label></button>
+  </div>
+</div>

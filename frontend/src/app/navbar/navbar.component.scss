@@ -1,0 +1,19 @@
+.custom-select,
+.form-control {
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  border-radius: 0px;
+  border-color: lightslategray;
+}
+
+.navbar-select {
+  border-radius: 5px;
+  border: none;
+  background-color: inherit;
+  color: inherit;
+}
+
+.navbar-select option {
+  background-color: #3f51b5;
+}

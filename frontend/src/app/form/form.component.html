@@ -1,0 +1,336 @@
+<div class="row">
+  <div class="col">
+    <form action="" [formGroup]="inputForm" (ngSubmit)="onSubmit()">
+      <mat-card class="">
+        <mat-card-header>
+          <mat-card-title> Personal Details </mat-card-title>
+        </mat-card-header>
+        <div class="form-row">
+          <div class="col">
+            <label class="custom-form-label"> First Name *</label>
+            <input [class.is-invalid]="inputForm.get('firstName').invalid && inputForm.get('firstName').touched" formControlName="firstName" type="text" class="form-control bg-dark text-light" />
+            <small *ngIf="inputForm.get('firstName').errors?.required && inputForm.get('firstName').touched" class="text-danger">First Name is required</small>
+            <small *ngIf="inputForm.get('firstName').errors?.minlength" class="text-danger">First Name is must be at least 2 characters long</small>
+            <small *ngIf="inputForm.get('firstName').errors?.forbiddenName" class="text-danger">Forbidden First Name: {{ inputForm.get('firstName').errors?.forbiddenName.value }}</small>
+          </div>
+          <div class="col">
+            <label class="custom-form-label"> Last Name *</label>
+            <input [class.is-invalid]="inputForm.get('lastName').invalid && inputForm.get('lastName').touched" formControlName="lastName" type="text" class="form-control bg-dark text-light" />
+            <small *ngIf="inputForm.get('firstName').errors?.required && inputForm.get('firstName').touched" class="text-danger">Last Name is required</small>
+            <small *ngIf="inputForm.get('lastName').errors?.forbiddenName && inputForm.get('lastName').touched" class="text-danger">
+              Forbidden Last Name: {{ inputForm.get('lastName').errors?.forbiddenName.value }}
+            </small>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col">
+            <label class="custom-form-label"> Gender *</label>
+            <select small [class.is-invalid]="inputForm.get('gender').invalid && inputForm.get('gender').touched" formControlName="gender" name="" id="gender" class="form-control bg-dark text-light">
+              <option value="default">Pick a Gender</option>
+              <option *ngFor="let gender of genderArray" [value]="gender">{{ gender }}</option>
+            </select>
+            <small class="" *ngIf="inputForm.get('gender').invalid && inputForm.get('gender').touched" class="text-danger">Gender is required </small>
+          </div>
+          <div class="col">
+            <label class="custom-form-label"> Blood Group </label>
+            <select
+              small
+              [class.is-invalid]="inputForm.get('bloodGroup').invalid && inputForm.get('bloodGroup').touched"
+              formControlName="bloodGroup"
+              name=""
+              id="bloodGroup"
+              class="form-control bg-dark text-light"
+            >
+              <option value="default">Pick your Blood Group</option>
+              <option *ngFor="let bloodGroup of bloodGroupArray" [value]="bloodGroup.value">{{ bloodGroup.text }}</option>
+            </select>
+            <small class="" *ngIf="inputForm.get('bloodGroup').invalid && inputForm.get('bloodGroup').touched" class="text-danger">Blood group is required </small>
+          </div>
+          <div class="col">
+            <label class="custom-form-label"> Marital Status </label>
+            <select
+              small
+              [class.is-invalid]="inputForm.get('maritalStatus').invalid && inputForm.get('maritalStatus').touched"
+              name=""
+              id="maritalStatus"
+              class="form-control bg-dark text-light"
+              formControlName="maritalStatus"
+            >
+              <option value="default">Pick an option</option>
+              <option *ngFor="let mStatus of maritalStatusArray" [value]="mStatus.value">{{ mStatus.text }}</option>
+            </select>
+            <small class=""> </small>
+          </div>
+        </div>
+        <div class="form-row" formGroupName="dateOfBirth" [class.is-invalid]="inputForm.get('dateOfBirth').invalid">
+          <div class="col">
+            <label class="custom-form-label"> Day of Birth </label>
+            <input
+              [class.is-invalid]="inputForm.get('dateOfBirth.dayOfBirth')?.invalid && inputForm.get('dateOfBirth.dayOfBirth').touched"
+              formControlName="dayOfBirth"
+              type="number"
+              class="form-control bg-dark text-light"
+              min="1"
+              max="31"
+            />
+            <small *ngIf="inputForm.get('dateOfBirth.dayOfBirth').touched && inputForm.get('dateOfBirth.dayOfBirth').invalid" class="text-danger"> Invalid Day </small>
+          </div>
+          <div class="col">
+            <label class="custom-form-label"> Month of Birth </label>
+            <small class=""> </small>
+            <select
+              [class.is-invalid]="inputForm.get('dateOfBirth.monthOfBirth')?.invalid && inputForm.get('dateOfBirth.monthOfBirth').touched"
+              formControlName="monthOfBirth"
+              class="form-control bg-dark text-light"
+            >
+              <option value="default">Pick a Month</option>
+              <option *ngFor="let month of monthArray" [value]="month.value">{{ month.text }}</option>
+            </select>
+          </div>
+          <div class="col">
+            <label class="custom-form-label"> Year of Birth </label>
+            <input
+              [class.is-invalid]="inputForm.get('dateOfBirth.yearOfBirth')?.invalid && inputForm.get('dateOfBirth.yearOfBirth')?.touched"
+              formControlName="yearOfBirth"
+              type="number"
+              class="form-control bg-dark text-light"
+              min="1900"
+              max="2100"
+            />
+            <small *ngIf="inputForm.get('dateOfBirth.yearOfBirth').touched && inputForm.get('dateOfBirth.yearOfBirth').invalid" class="text-danger"> Invalid Year </small>
+          </div>
+        </div>
+        <small *ngIf="inputForm.get('dateOfBirth').touched && inputForm.get('dateOfBirth').invalid" class="text-danger"> {{ inputForm.get('dateOfBirth')?.errors?.dayError }} </small>
+      </mat-card>
+      <br />
+      <mat-card class="form-group">
+        <mat-card-header>
+          <mat-card-title> Contact Information </mat-card-title>
+        </mat-card-header>
+        <div class="form-row" formGroupName="contactInformation">
+          <div class="col">
+            <label class="custom-form-label"> Phone Number </label>
+            <small class=""> </small>
+            <input
+              [class.is-invalid]="inputForm.get('contactInformation.phone').invalid && inputForm.get('contactInformation.phone').touched"
+              formControlName="phone"
+              type="number"
+              class="form-control bg-dark text-light"
+            />
+          </div>
+          <div class="col">
+            <label class="custom-form-label"> Email </label>
+            <small class=""> </small>
+            <input
+              [class.is-invalid]="inputForm.get('contactInformation.email').invalid && inputForm.get('contactInformation.email').touched"
+              formControlName="email"
+              type="email"
+              class="form-control bg-dark text-light"
+            />
+          </div>
+        </div>
+        <div class="" formGroupName="address">
+          <div class="form-row">
+            <div class="col-md-12">
+              <label class="custom-form-label"> Door #, Building, Street </label>
+              <small class=""> </small>
+              <input formControlName="address1" type="text" class="form-control bg-dark text-light" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col">
+              <label class="custom-form-label"> Town / City </label>
+              <small class=""> </small>
+              <input formControlName="townCity" type="text" class="form-control bg-dark text-light" />
+            </div>
+            <div class="col">
+              <label class="custom-form-label"> State / Province </label>
+              <small class=""> </small>
+              <input formControlName="provinceState" type="text" class="form-control bg-dark text-light" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col">
+              <label class="custom-form-label"> Country </label>
+              <small class=""> </small>
+              <input formControlName="country" type="text" class="form-control bg-dark text-light" />
+            </div>
+            <div class="col">
+              <label class="custom-form-label"> Postal Code </label>
+              <small class=""> </small>
+              <input formControlName="postalCode" type="number" class="form-control bg-dark text-light" />
+            </div>
+          </div>
+        </div>
+      </mat-card>
+      <mat-card class="form-group">
+        <mat-card-header>
+          <mat-card-title> Astrology </mat-card-title>
+        </mat-card-header>
+        <div class="form-row" formGroupName="astrology">
+          <div class="col">
+            <label class="custom-form-label">Gothra</label>
+            <input formControlName="gothra" type="text" class="form-control bg-dark text-light" />
+          </div>
+          <div class="col">
+            <label class="custom-form-label"> Nakshathra </label>
+            <select
+              small
+              [class.is-invalid]="inputForm.get('astrology.nakshathra').invalid && inputForm.get('astrology.nakshathra').touched"
+              formControlName="nakshathra"
+              class="form-control bg-dark text-light"
+            >
+              <option value="default">Select an option</option>
+              <option *ngFor="let nakshathra of nakshathraArray" [value]="nakshathra.value">{{ nakshathra[languageChoice] }}</option>
+            </select>
+          </div>
+          <div class="col">
+            <label class="custom-form-label"> Rasi </label>
+            <small class=""> </small>
+            <select small [class.is-invalid]="inputForm.get('astrology.rasi').invalid && inputForm.get('astrology.rasi').touched" formControlName="rasi" class="form-control bg-dark text-light">
+              <option value="default">Select an option</option>
+              <option *ngFor="let rasi of rasiArray" [value]="rasi.value">{{ rasi[languageChoice] }}</option>
+            </select>
+          </div>
+        </div>
+      </mat-card>
+      <div class="form-row" style="height: 30px">
+        <div class="col-1 form-check">
+          <input class="form-check-input" type="checkbox" formControlName="deceased" checked="false" />
+        </div>
+        <div class="col-5">
+          <label class="form-check-label" style="vertical-align: center"> Has this person deceased? </label>
+        </div>
+        <div class="col-6">
+          <div *ngIf="inputForm.get('deceased').value">
+            <label class="custom-form-label"> Date of Death </label>
+            <small class=""> </small>
+            <input formControlName="dateOfDeath" class="" type="date" class="form-control bg-dark text-light" />
+          </div>
+        </div>
+      </div>
+      <!-- Buttons -->
+      <br />
+      <div class="row mt-3 mb-3">
+        <div class="col">
+          <input hidden #uploadImage formControlName="photo" type="file" (change)="onImageSelect($event)" accept="image/*" />
+          <button (click)="uploadImage.click()" class="btn btn-primary" type="button">Upload Photo</button>
+        </div>
+        <div class="col">
+          <button [disabled]="!(inputForm.dirty && inputForm.valid)" class="btn btn-success" type="submit">
+            {{ submitButton }}
+          </button>
+        </div>
+        <div class="col">
+          <button class="btn btn-secondary ml-2 btn-light" class="btn btn-info" type="button" (click)="resetForm()">Clear</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- Preview Container -->
+  <div class="col preview-container">
+    <div class="form-group">
+      <h2>Preview</h2>
+      <mat-card>
+        <mat-card-header style="margin-left: 0">
+          <img mat-card-avatar class="images" [src]="this.inputForm.get('imgPath')?.value" />
+          <mat-card-title> {{ (this.inputForm.get('firstName')?.value || '') + ' ' + (this.inputForm.get('lastName')?.value || '') }} </mat-card-title>
+        </mat-card-header>
+        <mat-card-subtitle class=""> </mat-card-subtitle>
+        <mat-card-content>
+          <label>
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                aria-hidden="true"
+                focusable="false"
+                width="1.8em"
+                height="1.8em"
+                style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg)"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M19.58 3H15V1h8v8h-2V4.41l-4.83 4.83A5 5 0 0 1 13 16.9V19h2v2h-2v2h-2v-2H9v-2h2v-2.1a5 5 0 0 1-3.18-7.64L6.64 8.07l-1.4 1.39l-1.41-1.42l1.4-1.39L3 4.42V8H1V1h7v2H4.41l2.23 2.24l1.44-1.43L9.5 5.23L8.06 6.66l1.17 1.18C10 7.31 11 7 12 7s1.96.3 2.75.83L19.58 3M12 9a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3z"
+                  fill="#fff"
+                />
+              </svg>
+            </span>
+            {{ this.inputForm.get('gender').value }}
+          </label>
+          <br />
+          <label>
+            <span class="descriptions" data-toggle="tooltip" data-placement="top" title="Phone"><mat-icon class="viewIcons">phone</mat-icon></span>
+            {{ this.inputForm.get('contactInformation.phone')?.value }}
+          </label>
+          <br />
+          <label>
+            <span class="descriptions" data-toggle="tooltip" data-placement="top" title="Email"><mat-icon class="viewIcons">mail_outline</mat-icon></span>
+            {{ this.inputForm.get('contactInformation.email')?.value }}
+          </label>
+          <br />
+          <label>
+            <span class="descriptions" data-toggle="tooltip" data-placement="top" title="Birthday"><mat-icon class="viewIcons">cake</mat-icon></span>
+            {{
+              (this.inputForm.get('dateOfBirth.dayOfBirth').value || '') +
+                '-' +
+                (monthArray[this.inputForm.get('dateOfBirth.monthOfBirth').value - 1]?.text || '') +
+                '-' +
+                (this.inputForm.get('dateOfBirth.yearOfBirth').value || '')
+            }}
+          </label>
+          <br />
+          <label>
+            <span class="descriptions" data-toggle="tooltip" data-placement="top" title="Blood Group">
+              <svg width="24px" height="24px" viewBox="0 0 16 16" class="bi bi-droplet-fill" fill="currentColor" class="blood-drop" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  fill-rule="evenodd"
+                  d="M8 16a6 6 0 0 0 6-6c0-1.655-1.122-2.904-2.432-4.362C10.254 4.176 8.75 2.503 8 0c0 0-6 5.686-6 10a6 6 0 0 0 6 6zM6.646 4.646c-.376.377-1.272 1.489-2.093 3.13l.894.448c.78-1.559 1.616-2.58 1.907-2.87l-.708-.708z"
+                />
+              </svg>
+            </span>
+            {{ bloodGroupArray[this.inputForm.get('bloodGroup').value - 1]?.text }}</label
+          >
+          <br />
+          <label>
+            <span class="descriptions" data-toggle="tooltip" data-placement="top" title="Marital Status"><mat-icon class="viewIcons">family_restroom</mat-icon></span>
+            {{ maritalStatusArray[this.inputForm.get('maritalStatus').value]?.text }}</label
+          >
+          <br />
+
+          <label>
+            <span class="descriptions" data-toggle="tooltip" data-placement="top" title="Address"><mat-icon class="viewIcons">home</mat-icon></span> {{ this.inputForm.get('address.address1').value }}
+            {{ this.inputForm.get('address.townCity').value }}
+            {{ this.inputForm.get('address.provinceState').value }}
+            {{ this.inputForm.get('address.country').value }}
+            {{ this.inputForm.get('address.postalCode').value }}
+          </label>
+          <br />
+          <label>
+            <span class="descriptions" data-toggle="tooltip" data-placement="top" title="Gothra"><mat-icon>groups</mat-icon></span> {{ this.inputForm.get('astrology.gothra').value }}
+          </label>
+          <br />
+          <label>
+            <span class="descriptions" data-toggle="tooltip" data-placement="top" title="Rasi"><mat-icon>scatter_plot</mat-icon></span>
+            {{ nakshathraArray[this.inputForm.get('astrology.nakshathra').value - 1]?.english }}
+          </label>
+          <br />
+          <label>
+            <span class="descriptions" data-toggle="tooltip" data-placement="top" title="Nakshathra"><mat-icon>star_border</mat-icon></span>
+            {{ rasiArray[this.inputForm.get('astrology.rasi').value - 1]?.english }}
+          </label>
+          <br />
+          <tr *ngIf="this.inputForm.get('dateOfDeath').value">
+            <td>
+              <span class="descriptions" data-toggle="tooltip" data-placement="top" title="Date of Death"><mat-icon>airline_seat_flat</mat-icon></span>
+            </td>
+            <td>
+              <span class="values">{{ this.inputForm.get('dateOfDeath').value.substring(0, 10) }}</span>
+            </td>
+          </tr>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

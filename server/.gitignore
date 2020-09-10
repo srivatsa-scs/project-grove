@@ -1,0 +1,12 @@
+node_modules/
+database/node_modules/
+.vscode/
+.prettierrc
+.env
+public/
+test/bumpy.json
+test/flat.json
+logs/
+logs/exceptions/
+logs/general/
+logs/user/

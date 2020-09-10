@@ -1,0 +1,36 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+@import './app/loading/loading.component.scss';
+
+/* Material Stuff Customization ITS REALLY ANNOYING WTB DOCUMENTATION */
+
+.custom-modalbox > mat-dialog-container {
+  background-color: #222;
+  color: white;
+}
+
+mat-dialog-content,
+mat-dialog-title {
+  text-align: center;
+}
+
+/* Dark Theme Override for Angular-Material Cards */
+.mat-card,
+.mat-expansion-panel,
+.mat-select-colorer {
+  background: #343a40;
+  color: white;
+}
+
+main {
+  position: relative;
+}

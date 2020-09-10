@@ -1,0 +1,33 @@
+.viewIcons {
+  position: relative;
+  top: 5px;
+}
+
+mat-card-header {
+  align-content: center;
+}
+
+path .blood-color {
+  color: brickred;
+}
+
+.values {
+  margin-left: 10px;
+}
+
+.icon-desc {
+  font-size: 20px;
+  width: 20px;
+  position: relative;
+  top: 2px;
+}
+
+.page-description {
+  box-shadow: none;
+  max-width: 75%;
+}
+
+.view-icons,
+.icon-name {
+  display: none;
+}

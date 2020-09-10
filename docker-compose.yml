@@ -1,0 +1,139 @@
+version: '3.8'
+
+# Services
+services:
+  backend: # NodeJS
+    container_name: backend
+    build:
+      context: ./
+      dockerfile: backend.dockerfile
+    # image: atri/grove-backend
+    env_file:
+      - ./.env
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.backend.tls=true'
+      - 'traefik.http.routers.backend.entrypoints=websecure'
+      - 'traefik.http.services.backend.loadbalancer.server.port=${SERVER_PORT}'
+      - 'traefik.http.routers.backend.rule=Host(`${SERVER_SUBDOMAIN}.${DOMAIN_URL}`)'
+      - 'traefik.http.middlewares.backend.redirectscheme.scheme=websecure'
+      - 'traefik.http.middlewares.backend.redirectscheme.permanent=true'
+      - 'traefik.http.middlewares.backend.redirectscheme.port=443'
+      - 'traefik.http.routers.backend.tls.certresolver=le'
+      - 'traefik.http.routers.backend.tls.domains[0].main=*.${DOMAIN_URL}'
+    networks:
+      - web
+      - internal
+    volumes:
+      - ./server:/usr/backend
+    depends_on:
+      - data-db
+      - user-db
+      - reverse-proxy
+  data-db: # Postgres
+    container_name: data-db
+    image: postgres:12.3-alpine
+    volumes:
+      - data-db-volume:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+    networks:
+      - internal
+  pgadmin: # PGAdmin4
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    env_file:
+      - ./.env
+    volumes:
+      - pgadmin-servers:/pgadmin4/servers.json
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - data-db
+    networks:
+      - internal
+      - web
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.pgadmin.tls=true'
+      - 'traefik.http.routers.pgadmin.entrypoints=websecure'
+      - 'traefik.http.routers.pgadmin.rule=Host(`${PGADMIN_SUBDOMAIN}.${DOMAIN_URL}`)'
+      - 'traefik.http.services.pgadmin.loadbalancer.server.port=${PGADMIN_LISTEN_PORT}'
+      - 'traefik.http.middlewares.pgadmin.redirectscheme.scheme=https'
+      - 'traefik.http.middlewares.pgadmin.redirectscheme.permanent=true'
+      - 'traefik.http.routers.pgadmin.tls.certresolver=le'
+      - 'traefik.http.routers.pgadmin.tls.domains[0].main=*.${DOMAIN_URL}'
+  user-db: # MongoDB
+    container_name: user-db
+    image: mongo
+    volumes:
+      - user-db-volume:/data/db
+    env_file:
+      - ./.env
+    networks:
+      - internal
+    depends_on:
+      - reverse-proxy
+  reverse-proxy: # Traefik
+    container_name: traefik-reverse-proxy
+    image: traefik:v2.2.8
+    env_file:
+      - ./.env
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.traefik.tls=true'
+      - 'traefik.http.routers.traefik.entrypoints=websecure'
+      - 'traefik.http.routers.traefik.rule=Host(`${TRAEFIK_SUBDOMAIN}.${DOMAIN_URL}`)'
+      - 'traefik.http.routers.traefik.service=api@internal'
+      - 'traefik.http.routers.traefik.middlewares=auth'
+      - 'traefik.http.routers.redirs.rule=hostregexp(`{host:.+}`)'
+      - 'traefik.http.routers.redirs.entrypoints=web'
+      - 'traefik.http.routers.redirs.middlewares=redirect-to-https'
+      - 'traefik.http.services.traefik.loadbalancer.server.port=8080'
+      - 'traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_AUTH}'
+      - 'traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https'
+      - 'traefik.http.routers.traefik.tls.certresolver=le'
+      - 'traefik.http.routers.traefik.tls.domains[0].main=*.${DOMAIN_URL}'
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/grove/traefik.yml:/etc/traefik/traefik.yml
+      - ~/grove/certs:/etc/certs/
+      - ~/grove/acme/:/letsencrypt/
+    networks:
+      - web
+      - internal
+  nginx: # Nginx frontend
+    container_name: nginx
+    image: nginx:1.19.1-alpine
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.nginx.tls=true'
+      - 'traefik.http.routers.nginx.entrypoints=websecure'
+      - 'traefik.http.routers.nginx.rule=Host(`${FRONTEND_SUBDOMAIN}${DOMAIN_URL}`)'
+      - 'traefik.http.services.nginx.loadbalancer.server.port=80'
+      - 'traefik.http.middlewares.nginx.redirectscheme.scheme=https'
+      - 'traefik.http.middlewares.nginx.redirectscheme.permanent=true'
+      - 'traefik.http.routers.nginx.tls.certresolver=le'
+      - 'traefik.http.routers.nginx.tls.domains[0].main=*.${DOMAIN_URL}'
+      - 'traefik.http.routers.nginx.tls.domains[0].sans=${DOMAIN_URL}'
+    volumes:
+      - ./bind/nginx/:/etc/nginx/conf.d/
+      - ./bind/dist:/usr/share/nginx/html
+    depends_on:
+      - backend
+      - reverse-proxy
+    networks:
+      - web
+
+volumes: # Volumes
+  data-db-volume:
+  pgadmin-data:
+  pgadmin-servers:
+  user-db-volume:
+  acme-volume:
+
+networks: # Networks
+  internal:
+  web:

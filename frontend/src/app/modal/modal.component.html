@@ -1,0 +1,8 @@
+<div class="modal-container">
+  <h2 mat-dialog-title class="custom-modal-title">{{ data.question }}</h2>
+  <mat-dialog-content></mat-dialog-content>
+  <mat-dialog-actions class="justify-content-center pt-3">
+    <button type="button" class="btn btn-primary" [mat-dialog-close]="true">{{ data.submit }}</button>
+    <button type="button" class="btn btn-danger ml-3" mat-dialog-close>Close</button>
+  </mat-dialog-actions>
+</div>
